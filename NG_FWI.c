@@ -35,17 +35,23 @@ static const double DC_DEFAULT = 15;
 static const double DEFAULT_LATITUDE = 55.0;
 static const double DEFAULT_LONGITUDE = -120.0;
 
-static const double MPCT_TO_MC = 147.2772277;
+static const double MPCT_TO_MC = 250.0 * 59.5 / 101.0;
 static const double FFMC_INTERCEPT = 0.5;
 static const double DMC_INTERCEPT = 1.5;
 static const double DC_INTERCEPT = 2.8;
 
+double max(const double a, const double b) {
+  return a > b ? a : b;
+}
+double min(const double a, const double b) {
+  return a < b ? a : b;
+}
 /*
  * Fine Fuel Moisture Code (FFMC) from moisture %
  */
 double fine_fuel_moisture_code(double moisture_percent)
 {
-  return (59.5 * (250 - moisture_percent) / (MPCT_TO_MC + moisture_percent));
+  return max(0.0, min(101.0, (59.5 * (250 - moisture_percent) / (MPCT_TO_MC + moisture_percent))));
 }
 
 /*
@@ -53,7 +59,7 @@ double fine_fuel_moisture_code(double moisture_percent)
  */
 double fine_fuel_moisture_from_code(double moisture_code)
 {
-  return MPCT_TO_MC * (101 - moisture_code) / (59.5 + moisture_code);
+  return max(0.0, min(101.0, MPCT_TO_MC * (101 - moisture_code) / (59.5 + moisture_code)));
 }
 
 /**

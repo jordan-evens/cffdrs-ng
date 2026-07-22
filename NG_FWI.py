@@ -36,7 +36,7 @@ DC_DEFAULT = 15
 DEFAULT_LATITUDE = 55.0
 DEFAULT_LONGITUDE = -120.0
 
-MPCT_TO_MC = 147.2772277
+MPCT_TO_MC = 250.0 * 59.5 / 101.0
 FFMC_INTERCEPT = 0.5
 DMC_INTERCEPT = 1.5
 DC_INTERCEPT = 2.8
@@ -44,12 +44,12 @@ DC_INTERCEPT = 2.8
 
 # Fine Fuel Moisture Code (FFMC) from moisture %
 def fine_fuel_moisture_code(moisture_percent):
-    return 59.5 * (250 - moisture_percent) / (MPCT_TO_MC + moisture_percent)
+    return max(0, min(101, 59.5 * (250 - moisture_percent) / (MPCT_TO_MC + moisture_percent)))
 
 
 # Fine Fuel Moisture (%) from FFMC
 def fine_fuel_moisture_from_code(moisture_code):
-    return MPCT_TO_MC * (101 - moisture_code) / (59.5 + moisture_code)
+    return max(0, min(101, MPCT_TO_MC * (101 - moisture_code) / (59.5 + moisture_code)))
 
 
 # Calculate hourly Fine Fuel Moisture Code (FFMC)

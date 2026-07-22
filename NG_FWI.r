@@ -40,19 +40,19 @@ DEFAULT_LONGITUDE <- -120.0
 # # # start with daily indices at peak burn
 # # HOUR_TO_START_FROM <- 16
 
-MPCT_TO_MC <- 147.2772277
+MPCT_TO_MC <- 250.0 * 59.5 / 101.0
 FFMC_INTERCEPT <- 0.5
 DMC_INTERCEPT <- 1.5
 DC_INTERCEPT <- 2.8
 
 # Fine Fuel Moisture Code (FFMC) from moisture %
 fine_fuel_moisture_code <- function(moisture_percent) {
-  return((59.5 * (250 - moisture_percent) / (MPCT_TO_MC + moisture_percent)))
+  return(pmax(0, pmin(101, (59.5 * (250 - moisture_percent) / (MPCT_TO_MC + moisture_percent)))))
 }
 
 # Fine Fuel Moisture (%) from FFMC
 fine_fuel_moisture_from_code <- function(moisture_code) {
-  return(MPCT_TO_MC * (101 - moisture_code) / (59.5 + moisture_code))
+  return(pmax(0, pmin(101, MPCT_TO_MC * (101 - moisture_code) / (59.5 + moisture_code))))
 }
 
 #' Calculate hourly Fine Fuel Moisture Code (FFMC)
